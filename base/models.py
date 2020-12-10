@@ -60,3 +60,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', ]
+
+
+class Address(models.Model):
+
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    old = models.TextField(blank=True,help_text='구주소')
+    new = models.TextField(blank=True,help_text='신주소')
+    zip = models.CharField(blank=True,help_text='우편번호',max_length=5)
+    etc = models.TextField(blank=True,help_text='기타 주소')
