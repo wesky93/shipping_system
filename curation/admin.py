@@ -35,7 +35,7 @@ class MenuTabularInline(admin.TabularInline):
     def category(self, instance):
         return instance.menu.category if instance.menu else ''
 
-    category.short_description = '카테고'
+    category.short_description = '카테고리'
 
     def calorie(self, instance):
         return instance.menu.calorie if instance.menu else ''
