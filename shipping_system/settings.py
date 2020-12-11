@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'curation',
     'inventory',
     'order',
+    'delivery',
 ]
 
 MIDDLEWARE = [

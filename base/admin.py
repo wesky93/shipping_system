@@ -61,5 +61,10 @@ class RegionAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     model = User
+    fieldsets = (
+        (None, {'fields': ('email', 'name')}),
+        ('권한',
+         {'fields': ('is_active', 'is_superuser', 'is_staff', 'groups', 'user_permissions'), 'classes': ['collapse']})
+    )
 
     inlines = (AddressInlineAdmin,)
