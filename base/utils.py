@@ -3,7 +3,7 @@ from collections import namedtuple
 import requests
 from django.conf import settings
 
-NormalizeAddress = namedtuple('NormalizeAddress', 'old new zip')
+NormalizeAddress = namedtuple('NormalizeAddress', 'old new zip city district town')
 
 
 def normalize_address(address: str) -> NormalizeAddress:
@@ -20,4 +20,11 @@ def normalize_address(address: str) -> NormalizeAddress:
     if meta.get('errorMessage') != '정상' or meta.get('totalCount') != '1':
         raise ValueError('please input more detail address')
     juso = resp.get('juso')[0]
-    return NormalizeAddress(juso['jibunAddr'], juso['roadAddrPart1'], juso['zipNo'])
+    return NormalizeAddress(
+        juso['jibunAddr'], # 구 주소(지번)
+        juso['roadAddrPart1'], # 신 주소(도로명)
+        juso['zipNo'], # 우편번호
+        juso['siNm'], # 시/도
+        juso['sggNm'], # 시/구/군
+        juso['emdNm'], # 읍/명/동
+    )

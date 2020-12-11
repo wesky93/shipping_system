@@ -52,7 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
 
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now,editable=False)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
@@ -62,10 +62,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name', ]
 
 
-class Address(models.Model):
+class Region(models.Model):
+    class Meta:
+        index_together = [
+            ["city", "district", 'town', ],
+        ]
+        unique_together = ('city', 'district', 'town',)
 
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    old = models.TextField(blank=True,help_text='구주소')
-    new = models.TextField(blank=True,help_text='신주소')
-    zip = models.CharField(blank=True,help_text='우편번호',max_length=5)
-    etc = models.TextField(blank=True,help_text='기타 주소')
+    city = models.CharField(max_length=50, help_text='시/도')
+    district = models.CharField(max_length=50, help_text='시/구/군')
+    town = models.CharField(max_length=50, help_text='읍/면/동')
+
+    def __str__(self):
+        return f"<{self.city}|{self.district}|{self.town}>"
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    old = models.TextField(blank=True, help_text='구주소')
+    new = models.TextField(blank=True, help_text='신주소')
+    zip = models.CharField(blank=True, help_text='우편번호', max_length=5)
+    etc = models.TextField(blank=True, help_text='기타 주소', default='')
+    region = models.ForeignKey(Region, on_delete=models.PROTECT, blank=True)

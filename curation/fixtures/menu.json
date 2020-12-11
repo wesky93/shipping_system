@@ -1,0 +1,290 @@
+[
+{
+    "model": "curation.menu",
+    "pk": 1,
+    "fields": {
+        "name": "날치알 유부초밥",
+        "category": 1,
+        "calorie": 230
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 2,
+    "fields": {
+        "name": "크래미 유부초밥",
+        "category": 1,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 3,
+    "fields": {
+        "name": "불고기 유부초밥",
+        "category": 1,
+        "calorie": 240
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 4,
+    "fields": {
+        "name": "토마토 베지누들",
+        "category": 2,
+        "calorie": 100
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 5,
+    "fields": {
+        "name": "커리 베지누들",
+        "category": 2,
+        "calorie": 150
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 6,
+    "fields": {
+        "name": "누들샐러드 메밀소바",
+        "category": 2,
+        "calorie": 300
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 7,
+    "fields": {
+        "name": "누들샐러드 비빔면",
+        "category": 2,
+        "calorie": 240
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 8,
+    "fields": {
+        "name": "고추참치 주먹밥",
+        "category": 1,
+        "calorie": 300
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 9,
+    "fields": {
+        "name": "진미채 김밥",
+        "category": 1,
+        "calorie": 250
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 10,
+    "fields": {
+        "name": "꼬마햄치즈 김밥",
+        "category": 1,
+        "calorie": 290
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 11,
+    "fields": {
+        "name": "꼬마날치알 김밥",
+        "category": 1,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 12,
+    "fields": {
+        "name": "곤드레두부밥",
+        "category": 1,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 13,
+    "fields": {
+        "name": "매콤참치 덮밥",
+        "category": 1,
+        "calorie": 180
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 14,
+    "fields": {
+        "name": "매콤불고기 덮밥",
+        "category": 1,
+        "calorie": 400
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 15,
+    "fields": {
+        "name": "소고기듬뿍 덮밥",
+        "category": 1,
+        "calorie": 300
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 16,
+    "fields": {
+        "name": "훈제오리 덮밥",
+        "category": 1,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 17,
+    "fields": {
+        "name": "장어 덮밥",
+        "category": 1,
+        "calorie": 380
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 18,
+    "fields": {
+        "name": "양념장어강정 덮밥",
+        "category": 1,
+        "calorie": 370
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 19,
+    "fields": {
+        "name": "점보유부초밥",
+        "category": 1,
+        "calorie": 400
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 20,
+    "fields": {
+        "name": "와사비참치 유부초밥",
+        "category": 1,
+        "calorie": 310
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 21,
+    "fields": {
+        "name": "크래미에그 샌드위치",
+        "category": 3,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 22,
+    "fields": {
+        "name": "패스츄리 샌드위치",
+        "category": 3,
+        "calorie": 260
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 23,
+    "fields": {
+        "name": "에그햄 샌드위치",
+        "category": 3,
+        "calorie": 280
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 24,
+    "fields": {
+        "name": "닭가슴살 샌드위치",
+        "category": 3,
+        "calorie": 180
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 25,
+    "fields": {
+        "name": "크로와상 샌드위치",
+        "category": 3,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 26,
+    "fields": {
+        "name": "비프타코 샐러드랩",
+        "category": 3,
+        "calorie": 210
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 27,
+    "fields": {
+        "name": "바질패스토 닭가슴살 샌드위치",
+        "category": 3,
+        "calorie": 220
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 28,
+    "fields": {
+        "name": "홀그레인 머스타드 베이컨 샌드위치",
+        "category": 3,
+        "calorie": 230
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 29,
+    "fields": {
+        "name": "감자무스 샌드위치",
+        "category": 3,
+        "calorie": 200
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 30,
+    "fields": {
+        "name": "대만 샌드위치",
+        "category": 3,
+        "calorie": 180
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 31,
+    "fields": {
+        "name": "후무스베지랩",
+        "category": 3,
+        "calorie": 190
+    }
+},
+{
+    "model": "curation.menu",
+    "pk": 32,
+    "fields": {
+        "name": "부리또랩",
+        "category": 3,
+        "calorie": 230
+    }
+}
+]
