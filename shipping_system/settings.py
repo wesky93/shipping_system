@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'debug_toolbar',
     'drf_yasg',
+
+    # admin apps
     'adminsortable2',
+    'admin_numeric_filter',
+    'rangefilter',
 
     'base',
     'curation',
