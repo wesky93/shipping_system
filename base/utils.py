@@ -20,6 +20,7 @@ def normalize_address(address: str) -> NormalizeAddress:
     if meta.get('errorMessage') != '정상' or meta.get('totalCount') != '1':
         raise ValueError('please input more detail address')
     juso = resp.get('juso')[0]
+    print(juso)
     return NormalizeAddress(
         juso['jibunAddr'], # 구 주소(지번)
         juso['roadAddrPart1'], # 신 주소(도로명)
