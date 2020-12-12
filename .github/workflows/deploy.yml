@@ -22,8 +22,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Setup tmate session
-          uses: mxschmitt/action-tmate@v3
+#      - name: Setup tmate session
+#        uses: mxschmitt/action-tmate@v3
 
       - name: deploy
         run: ./deploy.sh
