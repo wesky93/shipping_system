@@ -9,12 +9,13 @@ from .utils import normalize_address
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ('address', 'etc', 'old', 'new', 'region')
+        fields = ('address', 'etc', 'old', 'new','zip', 'region')
 
         widgets = {
             'old': forms.TextInput(attrs={'disabled': True}),
             'new': forms.TextInput(attrs={'disabled': True}),
             'etc': forms.TextInput(attrs={'placeholder': '나머지 주소를 입력하세요'}, ),
+            'zip': forms.TextInput(attrs={'disabled': True}),
             'region': forms.TextInput(attrs={'disabled': True}),
 
         }

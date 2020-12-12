@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ADDRESS_SECRET_KEY = os.environ.get('ADDRESS_SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ.get('DJANGO_DEBUG',False) in ('true','True',True) else False
 
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = "base.User"
@@ -38,13 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'debug_toolbar',
     'drf_yasg',
 
     # admin apps
     'adminsortable2',
     'admin_numeric_filter',
     'rangefilter',
+    'fsm_admin',
+    'django_fsm_log',
 
     'base',
     'curation',
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
     'order',
     'delivery',
 ]
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar', ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,8 +95,12 @@ WSGI_APPLICATION = 'shipping_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DJANGO_DB_NAME', 'postgres'),
+        'USER': os.environ.get('DJANGO_DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'postgres'),
+        'HOST': os.environ.get('DJANGO_DB_HOST', 'db'),
+        'PORT': os.environ.get('DJANGO_DB_PORT', 5432),
     }
 }
 
