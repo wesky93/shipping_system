@@ -1,13 +1,17 @@
 name: Deploy EC2
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
 
 jobs:
-  merge-PR:
-    if: github.event.pull_request.merged == true
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,4 +24,3 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: deploy
         run: ./deploy.sh
-  push:
