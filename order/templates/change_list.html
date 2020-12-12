@@ -1,0 +1,18 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="/admin/order/order/create_orders/" method="POST">
+            {% csrf_token %}
+
+            <label>
+                주문 날짜
+                <input name="date" type="date" value="{% now "Y-m-d" %}">
+            </label>
+            <button type="submit" class="addlink">주문 일괄 생성</button>
+        </form>
+
+    </div>
+    <br/>
+    {{ block.super }}
+{% endblock %}

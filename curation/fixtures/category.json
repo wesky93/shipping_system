@@ -1,0 +1,23 @@
+[
+{
+    "model": "curation.category",
+    "pk": 1,
+    "fields": {
+        "name": "밥"
+    }
+},
+{
+    "model": "curation.category",
+    "pk": 2,
+    "fields": {
+        "name": "누들"
+    }
+},
+{
+    "model": "curation.category",
+    "pk": 3,
+    "fields": {
+        "name": "샌드위치"
+    }
+}
+]
