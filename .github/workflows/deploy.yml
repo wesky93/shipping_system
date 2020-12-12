@@ -19,4 +19,5 @@ jobs:
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: deploy
-        run: ./deploy_to_aws.sh
+        run: ./deploy.sh
+  push:

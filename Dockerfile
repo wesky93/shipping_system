@@ -5,6 +5,6 @@ WORKDIR /web
 COPY . .
 
 RUN pip install -r requirements-dev.txt
-RUN pip install -e git+https://github.com/lukasvinclav/django-admin-numeric-filter.git@9bd51fd9c9309b54c3a13f9a594775a014b2695e#egg=django-admin-numeric-filter
+RUN pip install https://github.com/lukasvinclav/django-admin-numeric-filter/archive/master.zip
 
 CMD python manage.py runserver 0:8000
