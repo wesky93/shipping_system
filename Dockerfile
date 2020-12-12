@@ -6,5 +6,4 @@ COPY . .
 
 RUN pip install -r requirements-dev.txt
 RUN pip install https://github.com/lukasvinclav/django-admin-numeric-filter/archive/master.zip
-
 CMD python manage.py runserver 0:8000
