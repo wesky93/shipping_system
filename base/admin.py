@@ -30,15 +30,17 @@ class AddressForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        try:
-            address = normalize_address(cleaned_data.get('address'))
-        except Exception as _:
-            raise ValidationError('주소를 상세하게 입력해주세요. https://www.juso.go.kr/openIndexPage.do')
+        address = cleaned_data.get('address')
+        if address:
+            try:
+                address = normalize_address(cleaned_data.get('address'))
+            except Exception as _:
+                raise ValidationError('주소를 상세하게 입력해주세요. https://www.juso.go.kr/openIndexPage.do')
 
-        cleaned_data['old'] = address.old
-        cleaned_data['new'] = address.new
-        cleaned_data['zip'] = address.zip
-        cleaned_data['region'], _ = Region.objects.get_or_create(city=address.city,
+            cleaned_data['old'] = address.old
+            cleaned_data['new'] = address.new
+            cleaned_data['zip'] = address.zip
+            cleaned_data['region'], _ = Region.objects.get_or_create(city=address.city,
                                                                  district=address.district,
                                                                  town=address.town)
         return cleaned_data
