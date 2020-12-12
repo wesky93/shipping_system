@@ -20,3 +20,4 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: deploy
         run: ./deploy.sh
+  push:
