@@ -10,3 +10,4 @@ https://github.com/lukasvinclav/django-admin-numeric-filter/archive/master.zip
 django-fsm
 django-fsm-admin
 django-fsm-log
+whitenoise
