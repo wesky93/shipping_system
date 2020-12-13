@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import OuterRef, QuerySet, Subquery, Sum
+from django.db.models import Count, OuterRef, QuerySet, Subquery, Sum
 from django.db.models.functions import Coalesce
 
 
@@ -14,11 +14,12 @@ class MenuQuerySetMixin():
     def get_queryset(self) -> QuerySet:
         return self
 
+
     def annotate_left_stock(self, date):
         from inventory.models import Stock
         left_stock_qs = Stock.objects.filter(date=date, menu=OuterRef('id')).annotate_left_stock().values_list(
             'left_stock')
-        return self.get_queryset().annotate(left_stock=Sum(Subquery(left_stock_qs)))
+        return self.get_queryset().annotate(left_stock=Coalesce(Sum(Subquery(left_stock_qs)), 0))
 
 
 class MenuQuerySet(QuerySet, MenuQuerySetMixin):
@@ -54,7 +55,7 @@ class SetMenuQuerySetMixin():
         left_stock_qs = Menu.objects.filter(setmenu=OuterRef('id')).annotate_left_stock(date).order_by('left_stock')
         return self.get_queryset().annotate(left_stock=Coalesce(Subquery(left_stock_qs.values('left_stock')[:1]), 0))
 
-    
+
 class SetMenuQuerySet(QuerySet, SetMenuQuerySetMixin):
     pass
 
@@ -73,12 +74,10 @@ class SetMenu(models.Model):
         return self.menus.aggregate(Sum('calorie')).get('calorie__sum', 0)
 
     def get_left_stock(self, date):
-        if hasattr(self,'left_stock'):
+        if hasattr(self, 'left_stock'):
             return self.left_stock
         left_stock_qs = Menu.objects.filter(setmenu=self).annotate_left_stock(date).order_by('left_stock')
         return left_stock_qs.first().left_stock
-    
-
 
     def __str__(self):
         return self.name

@@ -1,4 +1,5 @@
 # Register your models here.
+import logging
 from datetime import datetime
 
 from django import forms
@@ -50,7 +51,7 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
     ]
     change_list_template = 'change_list.html'
     inlines = [StateLogInline]
-    actions = ['do_curation']
+    actions = ['do_curation', 'assignment_deliverer', 'departure','delivered']
     action_form = OrderActionForm
 
     def has_change_permission(self, request, obj=None):
@@ -65,12 +66,13 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
         success = 0
         with transaction.atomic():
             curation = Curation.objects.get(pk=request.POST['curation_menu'])
-            print(request.POST)
             for order in queryset:
                 try:
                     order.curation(curation)
+                    order.save()
                     success += 1
                 except Exception as e:
+                    logging.exception(e)
                     messages.error(request, f"{e}")
                     fail += 1
                 total += 1
@@ -80,6 +82,29 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
                 messages.error(request, f'{total}개중 {fail}개 주문에 음식을 배정하지 못했습니다.')
 
     do_curation.short_description = '큐레이팅 하기'
+
+    def assignment_deliverer(self, request, queryset):
+        total = 0
+        fail = 0
+        success = 0
+        with transaction.atomic():
+            for order in queryset:
+                try:
+                    print(order)
+                    order.deliverer_assignment()
+                    order.save()
+                    success += 1
+                except Exception as e:
+                    logging.exception(e)
+                    messages.error(request, f"{e}")
+                    fail += 1
+                total += 1
+            if success:
+                messages.success(request, f'{total}개중 {success}개 주문에 배달원을 할당 했습니다')
+            if fail:
+                messages.error(request, f'{total}개중 {fail}개 주문에 배달원을 할당 하지 못했습니다')
+
+    assignment_deliverer.short_description = '배달 할당'
 
     def get_urls(self):
         urls = super().get_urls()
@@ -99,3 +124,19 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
                                  region=address.region)
         self.message_user(request, f"총 {users.count()}건의 주문이 생성 되었습니다.")
         return HttpResponseRedirect("../")
+
+    def departure(self, request, queryset):
+        for order in queryset:
+            order.departure()
+            order.save()
+        return
+
+    departure.short_description = '배송 출발'
+
+    def delivered(self, request, queryset):
+        for order in queryset:
+            order.finish()
+            order.save()
+        return
+
+    delivered.short_description = '배송 완료'

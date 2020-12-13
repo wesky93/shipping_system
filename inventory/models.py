@@ -35,9 +35,17 @@ class StockManager(models.Manager, StockQuerySetMixin):
 
 
 class Stock(models.Model):
+    class Meta:
+        unique_together = ('date', 'provider', 'menu')
+
     objects = StockManager()
 
     provider = models.ForeignKey(Provider, on_delete=models.PROTECT)
     menu = models.ForeignKey(Menu, on_delete=models.PROTECT)
     date = models.DateField()
     count = models.PositiveIntegerField(default=0)
+
+    def get_left_stock(self):
+        from order.models import Order
+
+        return self.count - Order.objects.filter(stocks=self).count()
