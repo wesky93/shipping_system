@@ -22,13 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ADDRESS_SECRET_KEY = os.environ.get('ADDRESS_SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True if os.environ.get('DJANGO_DEBUG', False) in ('true', 'True', True) else False
-DEBUG  = True
+DEBUG = True if os.environ.get('DJANGO_DEBUG', False) in ('true', 'True', True) else False
+# DEBUG  = True
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = "base.User"
 
 # Application definition
-
+CORS_ALLOW_ALL_ORIGINS = True
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
     'rest_framework',
     'django_extensions',
     'drf_yasg',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
