@@ -11,3 +11,4 @@ django-fsm
 django-fsm-admin
 django-fsm-log
 whitenoise
+djangorestframework-jwt

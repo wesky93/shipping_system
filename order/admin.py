@@ -1,4 +1,5 @@
 # Register your models here.
+import logging
 from datetime import datetime
 
 from django import forms
@@ -40,17 +41,19 @@ class OrderActionForm(ActionForm):
 class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
     model = Order
     search_fields = ('user__name', 'user__email', 'date', 'region__city', 'region__district', 'region__town',)
-    readonly_fields = ('user', 'new_address', 'old_address', 'etc_address', 'zip', 'region', 'state')
+    readonly_fields = ('user', 'new_address', 'old_address', 'etc_address', 'zip', 'region', 'state', 'stocks')
     list_display = ('date', 'state', 'user',)
     list_filter = ('state', 'date', 'region',)
     fsm_field = ['state', ]
     fieldsets = [
         (None, {'fields': ['state', 'date', 'user']}),
-        ('배송지 정보', {'fields': ['new_address', 'old_address', 'etc_address', 'zip', 'region', ]})
+        ('배송지 정보', {'fields': ['new_address', 'old_address', 'etc_address', 'zip', 'region', ]}),
+        ('음식', {'fields': ['stocks', ]}),
+
     ]
     change_list_template = 'change_list.html'
     inlines = [StateLogInline]
-    actions = ['do_curation']
+    actions = ['do_curation', 'assignment_deliverer', 'departure', 'delivered']
     action_form = OrderActionForm
 
     def has_change_permission(self, request, obj=None):
@@ -65,12 +68,13 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
         success = 0
         with transaction.atomic():
             curation = Curation.objects.get(pk=request.POST['curation_menu'])
-            print(request.POST)
             for order in queryset:
                 try:
                     order.curation(curation)
+                    order.save()
                     success += 1
                 except Exception as e:
+                    logging.exception(e)
                     messages.error(request, f"{e}")
                     fail += 1
                 total += 1
@@ -80,6 +84,28 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
                 messages.error(request, f'{total}개중 {fail}개 주문에 음식을 배정하지 못했습니다.')
 
     do_curation.short_description = '큐레이팅 하기'
+
+    def assignment_deliverer(self, request, queryset):
+        total = 0
+        fail = 0
+        success = 0
+        with transaction.atomic():
+            for order in queryset:
+                try:
+                    order.deliverer_assignment()
+                    order.save()
+                    success += 1
+                except Exception as e:
+                    logging.exception(e)
+                    messages.error(request, f"{e}")
+                    fail += 1
+                total += 1
+            if success:
+                messages.success(request, f'{total}개중 {success}개 주문에 배달원을 할당 했습니다')
+            if fail:
+                messages.error(request, f'{total}개중 {fail}개 주문에 배달원을 할당 하지 못했습니다')
+
+    assignment_deliverer.short_description = '배달 할당'
 
     def get_urls(self):
         urls = super().get_urls()
@@ -99,3 +125,50 @@ class OrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
                                  region=address.region)
         self.message_user(request, f"총 {users.count()}건의 주문이 생성 되었습니다.")
         return HttpResponseRedirect("../")
+
+    def departure(self, request, queryset):
+        total = 0
+        fail = 0
+        success = 0
+        with transaction.atomic():
+            for order in queryset:
+                try:
+                    order.departure()
+                    order.save()
+                    success += 1
+                except Exception as e:
+                    logging.exception(e)
+                    messages.error(request, f"{e}")
+                    fail += 1
+                total += 1
+
+            if success:
+                messages.success(request, f'{total}개중 {success}개 주문이 배달을 출발 했습니다')
+            if fail:
+                messages.error(request, f'{total}개중 {fail}개가 작업을 실패 했습니다')
+
+
+    departure.short_description = '배송 출발'
+
+    def delivered(self, request, queryset):
+        total = 0
+        fail = 0
+        success = 0
+        with transaction.atomic():
+            for order in queryset:
+                try:
+                    order.finish()
+                    order.save()
+                    success += 1
+                except Exception as e:
+                    logging.exception(e)
+                    messages.error(request, f"{e}")
+                    fail += 1
+                total += 1
+
+            if success:
+                messages.success(request, f'{total}개중 {success}개 주문에 배당을 완료 했습니다.')
+            if fail:
+                messages.error(request, f'{total}개중 {fail}개가 작업을 실패 했습니다.')
+
+    delivered.short_description = '배송 완료'

@@ -2,13 +2,14 @@ from typing import Union
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Count, OuterRef, Subquery, Sum
 from django_fsm import FSMField, transition
 from django_fsm_log.decorators import fsm_log_by
 
 from base.models import Region
 from curation.models import Curation, SetMenu
 from delivery.models import Deliverer
-from inventory.models import Provider, Stock
+from inventory.models import Stock
 
 
 class OrderState(models.TextChoices):
@@ -38,6 +39,8 @@ class Order(models.Model):
     @fsm_log_by
     @transition(field=state, source=OrderState.NEW.value, target=OrderState.FOOD_ASSIGNMENT.value, )
     def curation(self, set_menu_or_curation: Union[SetMenu, Curation, None] = None, **kwargs):
+        from inventory.models import Stock
+
         if isinstance(set_menu_or_curation, SetMenu):
             set_menu = set_menu_or_curation
         else:
@@ -52,13 +55,28 @@ class Order(models.Model):
         if not set_menu.get_left_stock(self.date):
             raise ValueError('No Stock')
 
-        self.stocks.set(Stock.objects.available(self.date).filter(menu__in=set_menu.menus.all()).distinct('menu'))
-        self.save()
+        left_stock_qs = Stock.objects \
+            .filter(date=self.date, menu=OuterRef('id')) \
+            .annotate_left_stock() \
+            .order_by('left_stock').values_list('id', flat=True)
+
+        stocks = set_menu.menus.annotate(stock_id=Subquery(left_stock_qs[:1])).values_list('stock_id', flat=True)
+
+        self.stocks.set(stocks)
 
     @fsm_log_by
     @transition(field=state, source=OrderState.FOOD_ASSIGNMENT.value, target=OrderState.READY.value, )
-    def deliverer_assignment(self):
-        pass
+    def deliverer_assignment(self, **kwargs):
+        subquery = Order.objects.filter(date=self.date, deliverer=OuterRef('pk')).only('pk')
+        deliverer = Deliverer.objects \
+            .filter(available_region__in=[self.region]) \
+            .annotate(order_sum=Count(Subquery(subquery))) \
+            .order_by('order_sum') \
+            .first()
+
+        if not deliverer:
+            raise ValueError('No deliverer')
+        self.deliverer = deliverer
 
     @fsm_log_by
     @transition(field=state, source=OrderState.READY.value, target=OrderState.DELIVERING.value, )
