@@ -20,13 +20,16 @@ from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions, routers
+from rest_framework import permissions
 from rest_framework_jwt.views import obtain_jwt_token
 
 from base.urls import router as base_router
+from delivery.urls import router as delivery_router
 
 schema_url_patterns = [
     path('account/', include(base_router.urls)),
+    path('delivery/', include(delivery_router.urls)),
+
     url(r'^auth/', obtain_jwt_token),
 
 ]

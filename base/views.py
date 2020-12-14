@@ -75,21 +75,6 @@ class AddressViewSet(viewsets.ViewSet):
             return Response(AddressSerializer(serializer.instance).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_id='add_my_address',
-        operation_summary='내 주소 추가',
-        request_body=CreateAddressSchema,
-        responses={"200": address_response}
-    )
-    def create(self, request):
-        data = request.data
-        data['user'] = request.user.id
-
-        serializer = CreateAddressSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(AddressSerializer(serializer.instance).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_id='delete_my_address',

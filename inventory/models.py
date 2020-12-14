@@ -49,3 +49,6 @@ class Stock(models.Model):
         from order.models import Order
 
         return self.count - Order.objects.filter(stocks=self).count()
+
+    def __str__(self):
+        return f"<재고({self.id}) {self.provider}:{self.menu}:{self.date}:{self.count}>"
